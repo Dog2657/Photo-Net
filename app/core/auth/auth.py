@@ -26,6 +26,12 @@ def login_user(response: Response, userId: str) -> dict:
         'token_expires': expires.strftime("%m/%d/%Y %H:%M:%S")
     }
 
+def getAlbemAccessType(access_list: list, userId: str) -> str | None:
+    for access in access_list:
+        if(access.get("userId") != userId):
+            continue
+
+        return access.get('type')
 
 def generate_pending_account_token_response(userId: str, email: str, username: str, expires: datetime, service: dict = None) -> dict:
     token = encodeToken({

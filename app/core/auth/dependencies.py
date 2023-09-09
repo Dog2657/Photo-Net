@@ -1,6 +1,7 @@
-from database.connections import UserDB, PendingUserDB, invalidAccessTokensDB
+from database.connections import UserDB, PendingUserDB, invalidAccessTokensDB, albemsDB
 from ..security.security import decodeToken
 from fastapi import HTTPException, Cookie
+from database.db import formatId
 from datetime import datetime
 from typing import Annotated
 import jose 
@@ -55,3 +56,33 @@ def getUserFromAccessToken(access_token: Annotated[str | None, Cookie()] = None)
 def notLoggedIn(access_token: Annotated[str | None, Cookie()] = None):
     if(access_token is not None):
         raise HTTPException(401, "You are already logged in")
+    
+def get_albem_from_id(albemId: str):
+    albem_id = formatId(albemId)
+    if(albem_id is None):
+        raise HTTPException(400, "Invalid albem id")
+    
+    search = albemsDB.find(id=albem_id)
+    if(search is None):
+        raise HTTPException(404, "No albem found")
+
+    return search
+
+def getUserFromAccessTokenIfValid(access_token: Annotated[str | None, Cookie()] = None):
+    if(access_token is None):
+        return None
+    
+    token = decode_Token(access_token, "access")
+
+    if(invalidAccessTokensDB.find({"token": access_token})):
+        return None
+
+    account = UserDB.find(id=token.get("userId"))
+    if(account is None):
+        return None
+    
+    issuedToken = datetime.fromtimestamp(token.get("issued"))
+    if(issuedToken < account.get('lastPasswordChange', issuedToken)):
+        return None
+    
+    return account 
