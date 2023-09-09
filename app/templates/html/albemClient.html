@@ -11,55 +11,48 @@
         <script defer src="/static/albemClient/main.js"></script>
     </head>
     <body>
+
+        <dialog data-name="share">
+            <header>
+                <h1>Share this albem</h1>
+                <form method="dialog">
+                    <button>
+                        <svg width="20" height="20" viewBox="0 0 100 100" alt="">
+                            <use xlink:href="/static/albemClient/icons.svg#close"></use>
+                        </svg>
+                    </button>
+                </form>
+            </header>
+
+            <div>Just scan this qr code</div>
+            <section class="QR-Code"></section>
+
+            <div>Or just copy this link</div>
+            <section class="Link"></section>
+        </dialog>
+
+
         <header>
-            <a>
-                <svg alt="">
+            <a class="home" href="/">
+                <svg alt="" width="30" height="30" viewBox="0 0 100 100">
                     <use xlink:href="/static/albemClient/icons.svg#home"></use>
                 </svg>
             </a>
 
-            {% if canEdit%}
-                <textarea>{{name}}</textarea>
-            {% else %}
-                <div>{{name}}</div>
-            {% endif %}
+            <div class="name">{{name}}</div>
 
-
-
-            <dialog data-name="share">
-                <header>
-                    <h1>Share this albem</h1>
-                    <form method="dialog">
-                        <button>
-                            <svg width="20" height="20" viewBox="0 0 100 100" alt="">
-                                <use xlink:href="/static/albemClient/icons.svg#close"></use>
-                            </svg>
-                        </button>
-                    </form>
-                </header>
-
-                <div>Just scan this qr code</div>
-                <section class="QR-Code"></section>
-
-                <div>Or just copy this link</div>
-                <section class="Link"></section>
-            </dialog>
-
-
-
-
-            <a href="/{{id}}?modal=share">
-                <svg alt="">
+            <button class="Share">
+                <svg alt="" width="30" height="30" viewBox="0 0 100 100">
                     <use xlink:href="/static/albemClient/icons.svg#share"></use>
                 </svg>
-            </a>
+            </button>
 
             {% if isOwner%}
-                <a href="/{{id}}?modal=settings">
-                    <svg alt="">
+                <button href="/{{id}}?modal=settings">
+                    <svg alt="" width="30" height="30" viewBox="0 0 100 100">
                         <use xlink:href="/static/albemClient/icons.svg#settings"></use>
                     </svg>
-                </a>
+                </button>
             {% endif %}
         </header>
         

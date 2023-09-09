@@ -51,11 +51,13 @@ def GET_Image_By_Index(request: Request, index: int, albem = Depends(get_albem_f
 def Get_Albem_Viewer(request: Request, albem = Depends(get_albem_from_id), account = Depends(getUserFromAccessTokenIfValid)):
     details = {
         "totalImages": imagesDB.count(albemId=albem.get("_id")),
-        "name": albem.get("name")
+        "name": albem.get("name"),
+        "id": albem.get("_id")
     }
 
     if(account):
         if(account.get("_id") == albem.get("owner")):
+            print("is owner")
             return templator.render('html/albemClient.html', **details, canEdit=True, isOwner=True)
         
         access_type = getAlbemAccessType(albem.get("access"), account.get("_id", None))

@@ -1,5 +1,25 @@
 @import 'general.scss';
 
+body > header{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+
+    div.name{
+        text-overflow: ellipsis; 
+        white-space: nowrap; 
+        overflow: hidden;
+        font-size: 30px;
+        margin: 0 10px;
+        flex-grow: 1;  
+    }
+    
+    svg{
+        color: rgb(60, 64, 67);
+    }
+}
+
 dialog[data-name=share]{
     section.QR-Code{
         width: 80%;
