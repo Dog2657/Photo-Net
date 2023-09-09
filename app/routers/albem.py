@@ -1,6 +1,6 @@
-from core.auth.dependencies import get_albem_from_id, getUserFromAccessTokenIfValid
-from fastapi import APIRouter, Depends, HTTPException, Request, Form, Response
+from core.auth.dependencies import get_albem_from_id, getUserFromAccessTokenIfValid, decode_Token
 from core.security.security import verify_password, encodeToken
+from fastapi import APIRouter, Depends, HTTPException, Request, Form
 from core.auth.auth import getAlbemAccessType
 from fastapi.responses import HTMLResponse, RedirectResponse
 from database.connections import imagesDB
@@ -35,6 +35,13 @@ def Get_Albem_Viewer(request: Request, albem = Depends(get_albem_from_id), accou
         if(password_access_token is None):
             return templator.render('html/passwordForm.html', albemId=albem.get("_id"))
         
+        tokenDetails = decode_Token(password_access_token, "albem-password-access")
+        if(tokenDetails.get('albemId') != albem.get("_id")):
+            raise HTTPException(401, "This token is for another albem")
+
+    return templator.render('html/albemViewer.html', **details, canEdit=False, isOwner=False)
+
+
 
 
 @router.post('/password_auth')
