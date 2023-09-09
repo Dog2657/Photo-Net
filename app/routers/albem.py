@@ -55,6 +55,8 @@ def Get_Albem_Viewer(request: Request, albem = Depends(get_albem_from_id), accou
         "id": albem.get("_id")
     }
 
+    print(account)
+
     if(account):
         if(account.get("_id") == albem.get("owner")):
             print("is owner")
@@ -67,6 +69,9 @@ def Get_Albem_Viewer(request: Request, albem = Depends(get_albem_from_id), accou
         if(access_type == 'viewer'):
             return templator.render('html/albemClient.html', **details, canEdit=False)
         del access_type
+
+    if(not albem.get('public')):
+        raise HTTPException(401, "This ablem is private and you don't have access" if account else "This albem is on private")
 
     if(albem.get('password', None) is not None):
         password_access_token = request.cookies.get(f"albem-password-access-{albem.get('_id')}")
