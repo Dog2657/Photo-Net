@@ -11,8 +11,31 @@
 
         <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
         <script defer src="/static/albemClient/main.js"></script>
+        {% if isOwner%}
+            <script type="module" defer src="/static/albemClient/ownerManagement.js"></script>
+            <script>const albemId = "{{id}}"</script>
+        {% endif %}
     </head>
     <body>
+        {% if isOwner%}
+            <dialog data-name="accessManagement">
+                <header>
+                    <h1>User Access</h1>
+                    <form method="dialog">
+                        <button>
+                            <svg width="20" height="20" viewBox="0 0 110 110" alt="">
+                                <use xlink:href="/static/albemClient/icons.svg#close"></use>
+                            </svg>
+                        </button>
+                    </form>
+                </header>
+                <section class="body">
+
+                    <div class="loader"></div>
+
+                </section>
+            </dialog>
+        {% endif %}
 
         <dialog data-name="share">
             <header>
@@ -32,7 +55,6 @@
             <div>Or just copy this link</div>
             <section class="Link"></section>
         </dialog>
-
 
         <header>
             <a class="home" href="/">
@@ -63,9 +85,6 @@
                 </button>
             {% endif %}
         </header>
-        
-      
-        
 
 
         {% for i in range(totalImages) %}
