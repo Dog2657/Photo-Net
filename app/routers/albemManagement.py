@@ -1,6 +1,7 @@
 from core.auth.dependencies import get_albem_from_id, getUserFromAccessToken
 from fastapi import APIRouter, Depends, HTTPException
-from database.connections import UserDB
+from database.connections import UserDB, albemsDB
+from core.auth.auth import getAlbemAccessType
 
 router = APIRouter(prefix='/{albemId}')
 
@@ -20,3 +21,25 @@ async def GET_Access_List(albem = Depends(get_albem_from_id), account = Depends(
         })
    
     return accessList
+
+
+@router.patch('/update-access')
+async def PATCH_Access_Type(userId: str, access: str, albem = Depends(get_albem_from_id), account = Depends(getUserFromAccessToken)):
+    if(albem.get("owner") != account.get("_id")):
+        raise HTTPException(401, "Only the albem owner may use this endpoint")
+    
+    user = UserDB.find(id=userId)
+    if(user is None):
+        raise HTTPException(404, "No user found with this id")
+    
+    if(access.lower() not in ['none', 'viewer', 'editor']):
+        raise HTTPException(400, "Not a valid access type (none or viewer or editor)")
+
+    if(getAlbemAccessType(albem.get('access'), user.get("_id")) is None):
+        raise HTTPException(400, "User dosn't have any access")
+
+    if(access.lower() == 'none'):
+        albemsDB.update({"$pull": {"access": {"userId": user.get("_id")}}}, id=albem.get("_id"))
+
+    else:
+        albemsDB.update({"$set": {"access.$.type": access.lower()}}, {'access.userId': user.get("_id")}, id=albem.get("_id"))

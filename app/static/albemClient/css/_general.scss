@@ -33,14 +33,13 @@ dialog{
     
     & > header{
         border-bottom: 1px solid #e6e6f7;
+        box-sizing: border-box;
         align-items: center;
         margin-bottom: 20px;
-        padding: 10px 0;
+        padding: 10px;
         display: flex;
         width: 100%;
        
-        
-        
         h1{
             margin: 0 0 0 40px;
             text-align: center;
