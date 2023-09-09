@@ -70,7 +70,9 @@ dialog[data-name=share]{
             margin-left: 10px;
             background-color: green;
             border-radius: 5px;
+            border: none;
             cursor: pointer;
+            outline: transparent;
             color: white;
             padding: 5px;
         }
