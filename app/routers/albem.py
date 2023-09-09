@@ -8,7 +8,9 @@ from datetime import datetime, timedelta
 from core import templator, environment
 from typing import Annotated
 
+
 router = APIRouter(prefix='/{albemId}')
+
 
 @router.get('/get-image/{index}')
 def GET_Image_By_Index(request: Request, index: int, albem = Depends(get_albem_from_id), account = Depends(getUserFromAccessTokenIfValid)):
@@ -54,14 +56,14 @@ def Get_Albem_Viewer(request: Request, albem = Depends(get_albem_from_id), accou
 
     if(account):
         if(account.get("_id") == albem.get("owner")):
-            return templator.render('html/albemViewer.html', **details, canEdit=True, isOwner=True)
+            return templator.render('html/albemClient.html', **details, canEdit=True, isOwner=True)
         
         access_type = getAlbemAccessType(albem.get("access"), account.get("_id", None))
         if(access_type == 'editor'):
-            return templator.render('html/albemViewer.html', **details, canEdit=True, isOwner=False)
+            return templator.render('html/albemClient.html', **details, canEdit=True, isOwner=False)
         
         if(access_type == 'viewer'):
-            return templator.render('html/albemViewer.html', **details, canEdit=False, isOwner=False)
+            return templator.render('html/albemClient.html', **details, canEdit=False, isOwner=False)
         
         del access_type
 
@@ -74,7 +76,7 @@ def Get_Albem_Viewer(request: Request, albem = Depends(get_albem_from_id), accou
         if(tokenDetails.get('albemId') != albem.get("_id")):
             raise HTTPException(401, "This token is for another albem")
 
-    return templator.render('html/albemViewer.html', **details, canEdit=False, isOwner=False)
+    return templator.render('html/albemClient.html', **details, canEdit=False, isOwner=False)
 
 
 

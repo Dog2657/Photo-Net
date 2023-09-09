@@ -4,14 +4,22 @@
         <title>Title</title>
         <meta charset='UTF-8'>
         <meta name='viewport' content='width=device-width, initial-scale=1'>
+
+        <script defer src="/static/albemClient/main.js"></script>
     </head>
     <body>
-        
-        <div>{{name}}</div>
+        <header>
+            {% if canEdit%}
+                <textarea>{{name}}</textarea>
+            {% else %}
+                <div>{{name}}</div>
+            {% endif %}
 
-        {% if canEdit%}
-            can edit<br>
-        {% endif %}
+
+        </header>
+        
+      
+        
 
 
         {% for i in range(totalImages) %}
