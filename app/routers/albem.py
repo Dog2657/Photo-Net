@@ -60,11 +60,10 @@ def Get_Albem_Viewer(request: Request, albem = Depends(get_albem_from_id), accou
         
         access_type = getAlbemAccessType(albem.get("access"), account.get("_id", None))
         if(access_type == 'editor'):
-            return templator.render('html/albemClient.html', **details, canEdit=True, isOwner=False)
+            return templator.render('html/albemClient.html', **details, canEdit=True)
         
         if(access_type == 'viewer'):
-            return templator.render('html/albemClient.html', **details, canEdit=False, isOwner=False)
-        
+            return templator.render('html/albemClient.html', **details, canEdit=False)
         del access_type
 
     if(albem.get('password', None) is not None):
@@ -76,7 +75,7 @@ def Get_Albem_Viewer(request: Request, albem = Depends(get_albem_from_id), accou
         if(tokenDetails.get('albemId') != albem.get("_id")):
             raise HTTPException(401, "This token is for another albem")
 
-    return templator.render('html/albemClient.html', **details, canEdit=False, isOwner=False)
+    return templator.render('html/albemClient.html', **details, canEdit=False)
 
 
 
