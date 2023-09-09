@@ -50,6 +50,28 @@ dialog > header button {
   width: 30px;
 }
 
+/*
+* The css code below came from https://cssloaders.github.io/
+*/
+.loader {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  display: inline-block;
+  border-top: 3px solid currentColor;
+  border-right: 3px solid transparent;
+  box-sizing: border-box;
+  animation: loading-animation 1s linear infinite;
+}
+
+@keyframes loading-animation {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
 body {
   margin: 0;
 }
