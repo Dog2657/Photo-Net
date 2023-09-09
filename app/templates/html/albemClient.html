@@ -5,6 +5,8 @@
         <meta charset='UTF-8'>
         <meta name='viewport' content='width=device-width, initial-scale=1'>
 
+        <link rel="icon" href="data:;base64,iVBORw0KGgo=">
+
         <link rel="stylesheet" href="/static/albemClient/css/main.css">
 
         <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
@@ -17,7 +19,7 @@
                 <h1>Share this albem</h1>
                 <form method="dialog">
                     <button>
-                        <svg width="20" height="20" viewBox="0 0 100 100" alt="">
+                        <svg width="20" height="20" viewBox="0 0 110 110" alt="">
                             <use xlink:href="/static/albemClient/icons.svg#close"></use>
                         </svg>
                     </button>
@@ -48,7 +50,13 @@
             </button>
 
             {% if isOwner%}
-                <button href="/{{id}}?modal=settings">
+                <button class="Usermanagement">
+                    <svg alt="" width="30" height="30" viewBox="0 0 100 100">
+                        <use xlink:href="/static/albemClient/icons.svg#users"></use>
+                    </svg>
+                </button>
+
+                <button>
                     <svg alt="" width="30" height="30" viewBox="0 0 100 100">
                         <use xlink:href="/static/albemClient/icons.svg#settings"></use>
                     </svg>
