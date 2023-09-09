@@ -15,7 +15,19 @@
                 <div>{{name}}</div>
             {% endif %}
 
+            <button>
+                <svg alt="">
+                    <use xlink:href="/static/albemClient/icons.svg#share"></use>
+                </svg>
+            </button>
 
+            {% if isOwner%}
+                <button>
+                    <svg alt="">
+                        <use xlink:href="/static/albemClient/icons.svg#settings"></use>
+                    </svg>
+                </button>
+            {% endif %}
         </header>
         
       
