@@ -1,0 +1,30 @@
+@import 'general.scss';
+
+dialog[data-name=share]{
+    section.QR-Code{
+        width: 80%;
+        margin: auto auto 20px auto;
+
+        img{
+            width: 100%;
+            height: 100%;
+        }
+    }
+
+    section.Link{
+        border-radius: 5px;
+        border: 2px solid #c8c8d6;
+        padding: 10px;
+        display: flex;
+        align-items: center;
+
+        button{
+            margin-left: 10px;
+            background-color: green;
+            border-radius: 5px;
+            cursor: pointer;
+            color: white;
+            padding: 5px;
+        }
+    }
+}
