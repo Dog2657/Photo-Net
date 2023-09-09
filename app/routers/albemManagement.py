@@ -23,6 +23,31 @@ async def GET_Access_List(albem = Depends(get_albem_from_id), account = Depends(
     return accessList
 
 
+@router.post('/add-access')
+async def POST_Add_Access(userSelector: str, access: str, albem = Depends(get_albem_from_id), account = Depends(getUserFromAccessToken)):
+    if(albem.get("owner") != account.get("_id")):
+        raise HTTPException(401, "Only the albem owner may use this endpoint")
+    
+    user = UserDB.findUserBySelector(userSelector)
+    if(user is None):
+        raise HTTPException(404, "No user found with this email/username")
+
+    if(access.lower() not in ['viewer', 'editor']):
+        raise HTTPException(400, "Not a valid access type (viewer or editor)")
+
+    if(getAlbemAccessType(albem.get('access'), user.get("_id")) is not None):
+        raise HTTPException(400, "This user already has aceess")
+
+    albemsDB.update({"$push": {"access": {"userId": user.get("_id"), "type": access.lower()}}}, id=albem.get("_id"))
+
+    return {
+        "userId": user.get("_id"),
+        "username": user.get("username"),
+        "email": user.get("email"),
+        "type": access.lower()
+    }
+
+
 @router.patch('/update-access')
 async def PATCH_Access_Type(userId: str, access: str, albem = Depends(get_albem_from_id), account = Depends(getUserFromAccessToken)):
     if(albem.get("owner") != account.get("_id")):

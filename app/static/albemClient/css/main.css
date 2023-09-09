@@ -159,6 +159,15 @@ dialog[data-name=share] section.Link button {
 dialog[data-name=accessManagement] {
   padding: 0;
 }
+dialog[data-name=accessManagement] .errorMessage {
+  color: red;
+}
+dialog[data-name=accessManagement] .errorMessage:empty {
+  display: none;
+}
+dialog[data-name=accessManagement] .errorMessage:not(:empty) ~ form.addAccess {
+  border-color: red !important;
+}
 dialog[data-name=accessManagement] form.addAccess {
   grid-template-columns: auto max-content;
   transition: outline 200ms ease-in-out;
@@ -211,10 +220,10 @@ dialog[data-name=accessManagement] div.body {
 dialog[data-name=accessManagement] div.body article {
   grid-template-columns: 1fr max-content;
   grid-template-rows: 1fr 1fr;
+  box-sizing: border-box;
   grid-auto-columns: 1fr;
   grid-auto-rows: 1fr;
   padding: 5px 30px;
-  box-sizing: border-box;
   text-align: left;
   display: grid;
   gap: 0px 0px;
