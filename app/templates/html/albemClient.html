@@ -29,11 +29,21 @@
                         </button>
                     </form>
                 </header>
-                <section class="body">
+
+                <form class="addAccess">
+                        <input type="text" placeholder="Username/Email">
+                        <select>
+                            <option value="viewer" selected>Viewer</option>
+                            <option value="editor">Editor</option>
+                        </select>
+                        <button type="submit">Add user access</button>
+                    </form>
+
+                <div class="body">
 
                     <div class="loader"></div>
 
-                </section>
+                </div>
             </dialog>
         {% endif %}
 
