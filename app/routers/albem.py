@@ -1,9 +1,12 @@
 from core.auth.dependencies import get_albem_from_id, getUserFromAccessTokenIfValid
-from fastapi import APIRouter, Depends, HTTPException, Request
+from fastapi import APIRouter, Depends, HTTPException, Request, Form, Response
+from core.security.security import verify_password, encodeToken
 from core.auth.auth import getAlbemAccessType
-from fastapi.responses import HTMLResponse
+from fastapi.responses import HTMLResponse, RedirectResponse
 from database.connections import imagesDB
-from core import templator
+from datetime import datetime, timedelta
+from core import templator, environment
+from typing import Annotated
 
 router = APIRouter(prefix='/{albemId}')
 
@@ -27,4 +30,34 @@ def Get_Albem_Viewer(request: Request, albem = Depends(get_albem_from_id), accou
         
         del access_type
 
+    if(albem.get('password', None) is not None):
+        password_access_token = request.cookies.get(f"albem-password-access-{albem.get('_id')}")
+        if(password_access_token is None):
+            return templator.render('html/passwordForm.html', albemId=albem.get("_id"))
+        
+
+
+@router.post('/password_auth')
+def POST_Albem_Password_Auth(password: Annotated[str, Form()], albem = Depends(get_albem_from_id)):
+    if(albem.get("password", None) is None):
+        raise HTTPException(400, "This albem isn't password protected")
+
+    if(not verify_password(password, albem.get("password"))):
+        return HTMLResponse(templator.render('html/passwordForm.html', albemId=albem.get("_id"), passwordIncorect=True))
     
+    expires = datetime.utcnow() + timedelta(hours= environment.get('Password_Access_Hour', 'int') )
+
+    token = encodeToken({
+        "type": "albem-password-access",
+        "albemId": albem.get("_id"),
+        "exp": expires
+    })
+
+    response = RedirectResponse(f'/{albem.get("_id")}')
+    response.set_cookie(
+        key=f"albem-password-access-{albem.get('_id')}",
+        value=token,
+        expires=expires.strftime('%a, %d-%b-%Y %T GMT')
+    )
+
+    return response
