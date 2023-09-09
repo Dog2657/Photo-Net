@@ -1,6 +1,6 @@
 from core.auth.dependencies import get_albem_from_id, getUserFromAccessTokenIfValid, decode_Token
+from fastapi import APIRouter, Depends, HTTPException, Request, Form, Response
 from core.security.security import verify_password, encodeToken
-from fastapi import APIRouter, Depends, HTTPException, Request, Form
 from core.auth.auth import getAlbemAccessType
 from fastapi.responses import HTMLResponse, RedirectResponse
 from database.connections import imagesDB
@@ -9,6 +9,41 @@ from core import templator, environment
 from typing import Annotated
 
 router = APIRouter(prefix='/{albemId}')
+
+@router.get('/get-image/{index}')
+def GET_Image_By_Index(request: Request, index: int, albem = Depends(get_albem_from_id), account = Depends(getUserFromAccessTokenIfValid)):
+    if(imagesDB.count(albemId=albem.get("_id")) <= index):
+        raise HTTPException(401, "Invalid image index")
+    
+    asset = imagesDB.db.findMany({"albemId": albem.get("_id")}, None, skip=index, limit=1)[0]
+    if(asset is None):
+        raise HTTPException(500, "Unable to get image")
+    
+    imageData = imagesDB.get(asset.get("_id")).read()
+    response = Response(content=imageData, media_type=asset.get('type'))
+
+    if(account):
+        if(account.get("_id") == albem.get("owner")):
+            return response
+        
+        if(getAlbemAccessType(albem.get("access"), account.get("_id", None)) is not None):
+            return response
+         
+    if(not albem.get('public')):
+        raise HTTPException(401, "This ablem is private and you don't have access" if account else "This albem is on private")
+
+    if(albem.get('password', None) is not None):
+        password_access_token = request.cookies.get(f"albem-password-access-{albem.get('_id')}")
+        if(password_access_token is None):
+            raise HTTPException(400, f"Please password authenticate")
+
+        
+        tokenDetails = decode_Token(password_access_token, "albem-password-access")
+        if(tokenDetails.get('albemId') != albem.get("_id")):
+            raise HTTPException(401, "This token is for another albem")
+
+    return response
+
 
 @router.api_route('/', methods=["GET", "POST"], response_class=HTMLResponse)
 def Get_Albem_Viewer(request: Request, albem = Depends(get_albem_from_id), account = Depends(getUserFromAccessTokenIfValid)):
