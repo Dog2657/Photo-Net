@@ -55,11 +55,9 @@ def Get_Albem_Viewer(request: Request, albem = Depends(get_albem_from_id), accou
         "id": albem.get("_id")
     }
 
-    print(account)
 
     if(account):
         if(account.get("_id") == albem.get("owner")):
-            print("is owner")
             return templator.render('html/albemClient.html', **details, canEdit=True, isOwner=True)
         
         access_type = getAlbemAccessType(albem.get("access"), account.get("_id", None))
