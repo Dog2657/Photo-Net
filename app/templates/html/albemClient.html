@@ -13,7 +13,10 @@
         <script defer src="/static/albemClient/main.js"></script>
         {% if isOwner%}
             <script type="module" defer src="/static/albemClient/ownerManagement.js"></script>
-            <script>const albemId = "{{id}}"</script>
+            <script>
+                const albemId = "{{id}}"
+                let hasPassword = ("{{hasPassword}}" == "True")? true:false
+            </script>
         {% endif %}
     </head>
     <body>
@@ -42,10 +45,56 @@
                 </form>
 
                 <div class="body">
-
                     <div class="loader"></div>
-
                 </div>
+            </dialog>
+
+            <dialog data-name="settings">
+                <header>
+                    <h1>Albem Settings</h1>
+                    <form method="dialog">
+                        <button>
+                            <svg width="20" height="20" viewBox="0 0 110 110" alt="">
+                                <use xlink:href="/static/albemClient/icons.svg#close"></use>
+                            </svg>
+                        </button>
+                    </form>
+                </header>
+
+                <form class="AlbemDetails">
+                    <label class="name">
+                        <div>Name:</div>
+                        <input value="{{name}}">
+                    </label>
+
+                    <label class="visibility">
+                        <div>Visibility:</div>
+                        <input id="albem-visibility-toggle" type="checkbox" {% if public %} checked {% endif %}>
+                        <label for="albem-visibility-toggle"></label>
+                    </label>
+
+                    <button class="save" type="button">Save</button>
+                </form>
+                
+                <hr>
+
+                
+                <h3>Link password</h3>
+
+                <form class="updatePassword">
+                    <input type="password" placeholder="New password" required>
+                    <button type="submit">
+                        {% if hasPassword %}
+                            Change
+                        {% else %}
+                            Add
+                        {% endif %}
+                    </button>
+                    {% if hasPassword %}
+                        <button type="button">Remove password</button>
+                    {% endif %}
+                </form>
+
             </dialog>
         {% endif %}
 
@@ -90,7 +139,7 @@
                     </svg>
                 </button>
 
-                <button>
+                <button class="settings">
                     <svg alt="" width="30" height="30" viewBox="0 0 100 100">
                         <use xlink:href="/static/albemClient/icons.svg#settings"></use>
                     </svg>

@@ -1,7 +1,9 @@
 from core.auth.dependencies import get_albem_from_id, getUserFromAccessToken
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, Form
 from database.connections import UserDB, albemsDB
+from core.security.security import hash_password
 from core.auth.auth import getAlbemAccessType
+from typing import Annotated
 
 router = APIRouter(prefix='/{albemId}')
 
@@ -68,3 +70,18 @@ async def PATCH_Access_Type(userId: str, access: str, albem = Depends(get_albem_
 
     else:
         albemsDB.update({"$set": {"access.$.type": access.lower()}}, {'access.userId': user.get("_id")}, id=albem.get("_id"))
+
+
+
+@router.patch('/set-link-password')
+async def PATCH_Set_Link_Password(password: Annotated[str, Form()] = "", albem = Depends(get_albem_from_id), account = Depends(getUserFromAccessToken)):
+    if(albem.get("owner") != account.get("_id")):
+        raise HTTPException(401, "Only the albem owner may use this endpoint")
+
+    if(password == ""):
+        albemsDB.update({"$unset": {"password": 1}}, id=albem.get("_id"))
+        return {"detail": "Password removed"}
+    
+    else:
+        albemsDB.update({"$set": {"password": hash_password(password)}}, id=albem.get("_id"))
+        return {"detail": "Password updated"}

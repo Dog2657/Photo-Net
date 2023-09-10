@@ -246,4 +246,112 @@ dialog[data-name=accessManagement] div.body article select {
   border: none;
   grid-area: select;
   background: none;
+}
+
+dialog[data-name=settings] {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+dialog[data-name=settings]:not([open]) {
+  visibility: none;
+  display: none;
+}
+dialog[data-name=settings] form.AlbemDetails {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+dialog[data-name=settings] form.AlbemDetails > label {
+  text-align: left;
+}
+dialog[data-name=settings] form.AlbemDetails > label.name > div {
+  width: -moz-max-content;
+  width: max-content;
+}
+dialog[data-name=settings] form.AlbemDetails > label.name input {
+  padding: 10px;
+  width: 100%;
+  box-sizing: border-box;
+  border-radius: 10px;
+  border: 1px solid grey;
+}
+dialog[data-name=settings] form.AlbemDetails > label.visibility input[type=checkbox] {
+  visibility: none;
+  display: none;
+}
+dialog[data-name=settings] form.AlbemDetails > label.visibility input[type=checkbox]:not(:checked) ~ label::before {
+  content: "Private";
+  color: grey;
+}
+dialog[data-name=settings] form.AlbemDetails > label.visibility input[type=checkbox]:checked ~ label::before {
+  content: "Public";
+  color: green;
+}
+dialog[data-name=settings] form.AlbemDetails > label.visibility label {
+  outline: 1px solid grey;
+  box-sizing: border-box;
+  border-radius: 10px;
+  text-align: center;
+  cursor: pointer;
+  display: block;
+  padding: 10px;
+  height: 38px;
+  width: 100%;
+}
+dialog[data-name=settings] form.AlbemDetails > button {
+  background-color: green;
+  box-sizing: border-box;
+  border-radius: 10px;
+  margin-top: 10px;
+  cursor: pointer;
+  color: white;
+  padding: 10px;
+  border: none;
+  width: 100%;
+}
+dialog[data-name=settings] hr {
+  width: 100%;
+  opacity: 0.75;
+  box-sizing: border-box;
+}
+dialog[data-name=settings] h3 {
+  margin: 0;
+}
+dialog[data-name=settings] form.updatePassword {
+  display: grid;
+  grid-auto-columns: 1fr;
+  grid-auto-rows: 1fr;
+  grid-template-columns: 1fr max-content;
+  grid-template-rows: 1fr 1fr;
+  gap: 20px 10px;
+  margin-bottom: 20px;
+  grid-template-areas: "Input UpdateBNT" "DeactivateBNT DeactivateBNT";
+}
+dialog[data-name=settings] form.updatePassword input {
+  grid-area: Input;
+  border-radius: 7px;
+  border: 1px solid black;
+}
+dialog[data-name=settings] form.updatePassword button[type=submit] {
+  grid-area: UpdateBNT;
+  background-color: rgb(0, 223, 0);
+  border-radius: inherit;
+  border: none;
+  cursor: pointer;
+  color: white;
+  font-size: 15px;
+  border-radius: 10px;
+  padding: 7px;
+}
+dialog[data-name=settings] form.updatePassword button[type=button] {
+  grid-area: DeactivateBNT;
+  background-color: rgb(255, 18, 18);
+  border-radius: inherit;
+  border: none;
+  cursor: pointer;
+  color: white;
+  font-size: 15px;
+  border-radius: 10px;
+  padding: 7px;
 }/*# sourceMappingURL=main.css.map */

@@ -46,7 +46,6 @@ document.querySelector('dialog[data-name=accessManagement] > form.addAccess').on
         return
     }
 
-
     input.value = ""
     select.value = 'viewer'
 
@@ -74,3 +73,66 @@ document.querySelector('body > header button.Usermanagement').onclick = async() 
         createAccessElement(userId, username, email, type)
     });
 }
+
+//-----------------------------------------------------//
+
+const settingsDialog = document.querySelector('dialog[data-name=settings]')
+
+document.querySelector('body > header button.settings').onclick = () => {
+    settingsDialog.showModal()
+}
+
+settingsDialog.querySelector('button.save').onclick = async() => {
+    const name = settingsDialog.querySelector('label.name > input')
+    const visibility = settingsDialog.querySelector('label.visibility > input[type=checkbox]')
+
+    
+
+}
+
+
+const disableLinkPassword = async({target}) => {
+    const data = new FormData()
+    data.append("password", '')
+
+    const [result, error] = await request(`/${albemId}/set-link-password`, "PATCH", data)
+    if(error){
+        console.error("Failed to update password:", error)
+        return
+    }
+
+    hasPassword = false
+    target.parentNode.querySelector('form.updatePassword > button').textContent = 'add'
+    target.remove()
+}
+
+settingsDialog.querySelector('form.updatePassword').onsubmit = async (e) => {
+    e.preventDefault()
+
+    const data = new FormData()
+    data.append("password", e.target.querySelector('input').value)
+
+    const [result, error] = await request(`/${albemId}/set-link-password`, "PATCH", data)
+    if(error){
+        console.error("Failed to update password:", error)
+        return
+    }
+
+    e.target.querySelector('input').value = ''
+
+    if(!hasPassword){
+        hasPassword = true;
+        e.target.querySelector('button').textContent = "Change"
+
+        const button = document.createElement('button')
+        button.type = "button"
+        button.textContent = "Remove password"
+        button.onclick = disableLinkPassword
+        settingsDialog.querySelector('form.updatePassword').appendChild(button)
+    }
+}
+
+
+
+if(settingsDialog.querySelector('form.updatePassword > button[type=button]'))
+    settingsDialog.querySelector('form.updatePassword > button[type=button]').onclick = disableLinkPassword

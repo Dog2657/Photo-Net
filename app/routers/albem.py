@@ -52,13 +52,17 @@ def Get_Albem_Viewer(request: Request, albem = Depends(get_albem_from_id), accou
     details = {
         "totalImages": imagesDB.count(albemId=albem.get("_id")),
         "name": albem.get("name"),
-        "id": albem.get("_id")
+        "id": albem.get("_id"),
+        "public": albem.get('public'),
     }
 
 
     if(account):
         if(account.get("_id") == albem.get("owner")):
-            return templator.render('html/albemClient.html', **details, canEdit=True, isOwner=True)
+            return templator.render('html/albemClient.html', **details,
+                hasPassword=albem.get("password", None) is not None,
+                canEdit=True, isOwner=True
+            )
         
         access_type = getAlbemAccessType(albem.get("access"), account.get("_id", None))
         if(access_type == 'editor'):
