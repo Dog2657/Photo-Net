@@ -47,6 +47,44 @@ def GET_Image_By_Index(request: Request, index: int, albem = Depends(get_albem_f
     return response
 
 
+@router.get("/get-viewer")
+def GET_Viewer_HTML(request: Request, albem = Depends(get_albem_from_id), account = Depends(getUserFromAccessTokenIfValid)):
+    details = {
+        "totalImages": imagesDB.count(albemId=albem.get("_id")),
+        "id": albem.get("_id"),
+        "imageIndex": 0,
+        "isOpen": False
+    }
+
+    if(account):
+        if(account.get("_id") == albem.get("owner")):
+            return templator.render('html/ImageViewer-Section.html', **details, canEdit=True)
+        
+        access_type = getAlbemAccessType(albem.get("access"), account.get("_id", None))
+        if(access_type == 'editor'):
+            return templator.render('html/ImageViewer-Section.html', **details, canEdit=True)
+        
+        if(access_type == 'viewer'):
+            return templator.render('html/ImageViewer-Section.html', **details)
+        del access_type
+
+    if(not albem.get('public')):
+        raise HTTPException(401, "This ablem is private and you don't have access" if account else "This albem is on private")
+
+    if(albem.get('password', None) is not None):
+        password_access_token = request.cookies.get(f"albem-password-access-{albem.get('_id')}")
+        if(password_access_token is None):
+            raise HTTPException(401, "Password cookie is required")
+        
+        tokenDetails = decode_Token(password_access_token, "albem-password-access")
+        if(tokenDetails.get('albemId') != albem.get("_id")):
+            raise HTTPException(401, "This token is for another albem")
+
+    return templator.render('html/ImageViewer-Section.html', **details)
+
+
+
+
 @router.api_route('/', methods=["GET", "POST"], response_class=HTMLResponse)
 def Get_Albem_Viewer(request: Request, albem = Depends(get_albem_from_id), account = Depends(getUserFromAccessTokenIfValid)):
     details = {
@@ -85,6 +123,45 @@ def Get_Albem_Viewer(request: Request, albem = Depends(get_albem_from_id), accou
             raise HTTPException(401, "This token is for another albem")
 
     return templator.render('html/albemClient.html', **details, canEdit=False)
+
+
+@router.api_route('/{imageIndex}', methods=["GET", "POST"], response_class=HTMLResponse)
+async def Get_Image_Viewer(request: Request, imageIndex: int, albem = Depends(get_albem_from_id), account = Depends(getUserFromAccessTokenIfValid)):
+    details = {
+        "totalImages": imagesDB.count(albemId=albem.get("_id")),
+        "id": albem.get("_id"),
+        "imageIndex": imageIndex,
+        "isOpen": True
+    }
+
+    if(imageIndex > details['totalImages']):
+        raise HTTPException(401, "Invalid image index")
+
+    if(account):
+        if(account.get("_id") == albem.get("owner")):
+            return templator.render('html/ImageViewer-Page.html', **details, canEdit=True)
+        
+        access_type = getAlbemAccessType(albem.get("access"), account.get("_id", None))
+        if(access_type == 'editor'):
+            return templator.render('html/ImageViewer-Page.html', **details, canEdit=True)
+        
+        if(access_type == 'viewer'):
+            return templator.render('html/ImageViewer-Page.html', **details)
+        del access_type
+
+    if(not albem.get('public')):
+        raise HTTPException(401, "This ablem is private and you don't have access" if account else "This albem is on private")
+
+    if(albem.get('password', None) is not None):
+        password_access_token = request.cookies.get(f"albem-password-access-{albem.get('_id')}")
+        if(password_access_token is None):
+            return templator.render('html/passwordForm.html', albemId=albem.get("_id"))
+        
+        tokenDetails = decode_Token(password_access_token, "albem-password-access")
+        if(tokenDetails.get('albemId') != albem.get("_id")):
+            raise HTTPException(401, "This token is for another albem")
+
+    return templator.render('html/ImageViewer-Page.html', **details)
 
 
 

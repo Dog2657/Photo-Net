@@ -89,19 +89,22 @@ dialog > header button {
 }
 body {
   margin: 0;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  gap: 20px;
 }
 
-body > header {
+body > header.AlbemHeader {
   display: flex;
   align-items: center;
   justify-content: center;
   padding: 10px;
   gap: 10px;
   z-index: 5;
-  margin-bottom: 20px;
   box-shadow: 0 1px 2px 0 rgba(60, 64, 67, 0.3), 0 2px 6px 2px rgba(60, 64, 67, 0.15);
 }
-body > header :is(button, a) {
+body > header.AlbemHeader :is(button, a) {
   transition: background-color 200ms ease-in-out;
   background: transparent;
   justify-content: center;
@@ -115,10 +118,10 @@ body > header :is(button, a) {
   padding: 10px;
   border: none;
 }
-body > header :is(button, a):hover {
+body > header.AlbemHeader :is(button, a):hover {
   background-color: #F5F5F5;
 }
-body > header div.name {
+body > header.AlbemHeader div.name {
   text-overflow: ellipsis;
   white-space: nowrap;
   overflow: hidden;
@@ -126,8 +129,16 @@ body > header div.name {
   margin: 0 10px;
   flex-grow: 1;
 }
-body > header svg {
+body > header.AlbemHeader svg {
   color: rgb(60, 64, 67);
+}
+
+section.Images {
+  flex-grow: 1;
+}
+section.Images img {
+  max-height: 200px;
+  max-width: 200px;
 }
 
 dialog[data-name=share] section.QR-Code {

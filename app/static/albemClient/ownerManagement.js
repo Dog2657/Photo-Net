@@ -56,7 +56,7 @@ document.querySelector('dialog[data-name=accessManagement] > form.addAccess > in
     accessDialog.querySelector('div.errorMessage').textContent = ""
 }
 
-document.querySelector('body > header button.Usermanagement').onclick = async() => {
+document.querySelector('body > header.AlbemHeader button.Usermanagement').onclick = async() => {
     accessDialog.showModal()
 
     const [result, error] = await request(`/${albemId}/access-list`)
@@ -78,7 +78,7 @@ document.querySelector('body > header button.Usermanagement').onclick = async() 
 
 const settingsDialog = document.querySelector('dialog[data-name=settings]')
 
-document.querySelector('body > header button.settings').onclick = () => {
+document.querySelector('body > header.AlbemHeader button.settings').onclick = () => {
     settingsDialog.showModal()
 }
 
@@ -144,7 +144,7 @@ settingsDialog.querySelector('form.AlbemDetails').onsubmit = async(e) => {
         return
     }
 
-    document.querySelector('body > header > div.name').textContent = nameInput.value
+    document.querySelector('body > header.AlbemHeader > div.name').textContent = nameInput.value
 }
 
 if(settingsDialog.querySelector('form.updatePassword > button[type=button]'))

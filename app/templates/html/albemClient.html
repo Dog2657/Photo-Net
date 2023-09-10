@@ -11,13 +11,14 @@
 
         <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
         <script defer src="/static/albemClient/main.js"></script>
+        <script type="module" async src="/static/albemClient/viewerLoader.js"></script>
         {% if isOwner%}
             <script type="module" defer src="/static/albemClient/ownerManagement.js"></script>
-            <script>
-                const albemId = "{{id}}"
-                let hasPassword = ("{{hasPassword}}" == "True")? true:false
-            </script>
         {% endif %}
+        <script>
+            const albemId = "{{id}}"
+            let hasPassword = ("{{hasPassword}}" == "True")? true:false
+        </script>
     </head>
     <body>
         {% if isOwner%}
@@ -117,7 +118,7 @@
             <section class="Link"></section>
         </dialog>
 
-        <header>
+        <header class="AlbemHeader">
             <a class="home" href="/">
                 <svg alt="" width="30" height="30" viewBox="0 0 100 100">
                     <use xlink:href="/static/albemClient/icons.svg#home"></use>
@@ -147,9 +148,12 @@
             {% endif %}
         </header>
 
-
-        {% for i in range(totalImages) %}
-            {{ i }}
-        {% endfor %}
+        <section class="Images">
+            {% for i in range(totalImages) %}
+                <a data href="/{{id}}/{{i}}">
+                    <img src="/{{id}}/get-image/{{i}}">
+                </a>
+            {% endfor %}
+        </section>
     </body>
 </html>

@@ -1,0 +1,20 @@
+<details class="ImageViewer" {% if isOpen %} open {% endif %}>
+    <summary></summary>
+    
+    <header>
+        <a class="CloseBNT" href="/{{id}}/">
+            <svg width="20" height="20" viewBox="0 0 110 110" alt="">
+                <use xlink:href="/static/albemClient/icons.svg#close"></use>
+            </svg>
+        </a>
+        {% if canEdit %}
+            <a href="" class="deleteImage">
+                <svg width="20" height="20" viewBox="0 0 110 110" alt="">
+                    <use xlink:href="/static/albemClient/icons.svg#bin"></use>
+                </svg>
+            </a>
+        {% endif %}
+    </header>
+
+    <img src="/{{id}}/get-image/{{imageIndex}}" alt="">
+</details>
