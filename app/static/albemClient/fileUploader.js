@@ -36,7 +36,7 @@ async function handleFilesUpload(files){
         if(state == 'success'){
             const i = prefixCount + index
             document.querySelector('section.Images').innerHTML += 
-            `<a data href="/${albemId}/${i}">
+            `<a data href="/${albemId}/i/${i}">
                 <img src="/${albemId}/get-image/${i}">
             </a>`
         }
