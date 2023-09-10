@@ -125,7 +125,7 @@ def Get_Albem_Viewer(request: Request, albem = Depends(get_albem_from_id), accou
     return templator.render('html/albemClient.html', **details, canEdit=False)
 
 
-@router.api_route('/{imageIndex}', methods=["GET", "POST"], response_class=HTMLResponse)
+@router.api_route('/i/{imageIndex}', methods=["GET", "POST"], response_class=HTMLResponse)
 async def Get_Image_Viewer(request: Request, imageIndex: int, albem = Depends(get_albem_from_id), account = Depends(getUserFromAccessTokenIfValid)):
     details = {
         "totalImages": imagesDB.count(albemId=albem.get("_id")),

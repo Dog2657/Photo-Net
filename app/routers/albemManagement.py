@@ -1,11 +1,11 @@
 from core.auth.dependencies import get_albem_from_id, getUserFromAccessToken
 from fastapi import APIRouter, Depends, HTTPException, Form
-from database.connections import UserDB, albemsDB
+from database.connections import UserDB, albemsDB, imagesDB
 from core.security.security import hash_password
 from core.auth.auth import getAlbemAccessType
 from typing import Annotated
 
-router = APIRouter(prefix='/{albemId}')
+router = APIRouter(prefix='/api/{albemId}')
 
 @router.get("/access-list")
 async def GET_Access_List(albem = Depends(get_albem_from_id), account = Depends(getUserFromAccessToken)):
@@ -96,3 +96,24 @@ async def PUT_Update_Albem_Details(public: bool, name: str = "", albem = Depends
         raise HTTPException(400, "Name can't be blank")
     
     albemsDB.update({"$set": {"name": name, "public": public}})
+
+
+
+@router.delete('/delete-image/{index}')
+async def DELETE_Image(index: int, albem = Depends(get_albem_from_id), account = Depends(getUserFromAccessToken)):
+    if(
+        albem.get("owner") != account.get("_id") and
+        getAlbemAccessType(albem.get("access"), account.get("_id", None)) != "editor"
+    ):
+        raise HTTPException(401, "You don't have the editor permission")
+    
+    if(imagesDB.count(albemId=albem.get("_id")) <= index):
+        raise HTTPException(401, "Invalid image index")
+
+    assetId = imagesDB.db.findMany({"albemId": albem.get("_id")}, None, skip=index, limit=1)[0].get("_id", None)
+    if(assetId is None):
+        raise HTTPException(500, "Unable to get image")
+    
+    imagesDB.delete(assetId)
+
+    albemId = albem.get('_id')

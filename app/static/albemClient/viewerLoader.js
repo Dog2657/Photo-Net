@@ -12,7 +12,16 @@ const html = parser.parseFromString(htmlString, 'text/html');
 
 function init(){
     //Add viewer css styles
-    document.querySelector('html > head').innerHTML +=`<link rel="stylesheet" href="/static/ImageViewer/css/main.css">`
+    document.head.innerHTML += `<link rel="stylesheet" href="/static/ImageViewer/css/main.css">`
+    
+
+    //Add script file
+    var script = document.createElement('script');
+    script.src = '/static/ImageViewer/main.js';
+    script.defer = true;
+    script.type = "module"
+
+    document.head.appendChild(script);
 
     //Added viewer to document
     const viewer = document.body.insertBefore(
@@ -35,7 +44,7 @@ function init(){
         const src_split = e.target.src.split("/")
         const imageIndex = Number(src_split[src_split.length-1])
 
-        window.history.pushState(undefined, "pageTitle", `/${albemId}/${imageIndex}`);
+        window.history.pushState(undefined, "pageTitle", `/${albemId}/i/${imageIndex}`);
     }
 
     document.querySelectorAll("body > section.Images > a").forEach(element => {

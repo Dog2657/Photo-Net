@@ -18,7 +18,7 @@ function createAccessElement(userId, username, email, type){
 
     select.onchange = async (e) => {
         const userId = e.target.parentNode.getAttribute("data-userId")
-        const [result, error] = await request(`/${albemId}/update-access?userId=${userId}&access=${e.target.value}`, "PATCH")
+        const [result, error] = await request(`/api/${albemId}/update-access?userId=${userId}&access=${e.target.value}`, "PATCH")
         if(error){
             console.info("TODO: handle errors")
             return
@@ -40,7 +40,7 @@ document.querySelector('dialog[data-name=accessManagement] > form.addAccess').on
     const select = event.target.querySelector('select')
 
 
-    const [result, error] = await request(`/${albemId}/add-access?userSelector=${input.value}&access=${select.value}`, "POST")
+    const [result, error] = await request(`/api/${albemId}/add-access?userSelector=${input.value}&access=${select.value}`, "POST")
     if(error){
         accessDialog.querySelector('div.errorMessage').textContent = error
         return
@@ -59,13 +59,15 @@ document.querySelector('dialog[data-name=accessManagement] > form.addAccess > in
 document.querySelector('body > header.AlbemHeader button.Usermanagement').onclick = async() => {
     accessDialog.showModal()
 
-    const [result, error] = await request(`/${albemId}/access-list`)
+    const modalBody = accessDialog.querySelector('.body')
+
+    const [result, error] = await request(`/api/${albemId}/access-list`)
     if(error){
+        console.log(error)
         modalBody.innerHTML = `<div style='color: red'>${error}</div>`
         return
     }
 
-    const modalBody = accessDialog.querySelector('.body')
     modalBody.style.minHeight = 'unset'
     modalBody.innerHTML = ""
 
@@ -82,20 +84,12 @@ document.querySelector('body > header.AlbemHeader button.settings').onclick = ()
     settingsDialog.showModal()
 }
 
-settingsDialog.querySelector('button.save').onclick = async() => {
-    const name = settingsDialog.querySelector('label.name > input')
-    const visibility = settingsDialog.querySelector('label.visibility > input[type=checkbox]')
-
-    
-
-}
-
 
 const disableLinkPassword = async({target}) => {
     const data = new FormData()
     data.append("password", '')
 
-    const [result, error] = await request(`/${albemId}/set-link-password`, "PATCH", data)
+    const [result, error] = await request(`/api/${albemId}/set-link-password`, "PATCH", data)
     if(error){
         console.error("Failed to update password:", error)
         return
@@ -112,7 +106,7 @@ settingsDialog.querySelector('form.updatePassword').onsubmit = async (e) => {
     const data = new FormData()
     data.append("password", e.target.querySelector('input').value)
 
-    const [result, error] = await request(`/${albemId}/set-link-password`, "PATCH", data)
+    const [result, error] = await request(`/api/${albemId}/set-link-password`, "PATCH", data)
     if(error){
         console.error("Failed to update password:", error)
         return
@@ -138,7 +132,7 @@ settingsDialog.querySelector('form.AlbemDetails').onsubmit = async(e) => {
     const nameInput = e.target.querySelector('label.name > input')
     const publicCheckbox = e.target.querySelector('label.visibility > input[type=checkbox]')
 
-    const [result, error] = await request(`/${albemId}/update?public=${publicCheckbox.checked}&name=${nameInput.value}`, "PUT")
+    const [result, error] = await request(`/api/${albemId}/update?public=${publicCheckbox.checked}&name=${nameInput.value}`, "PUT")
     if(error){
         console.error("Failed to update albem details:", error)
         return

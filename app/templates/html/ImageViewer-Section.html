@@ -1,18 +1,31 @@
 <details class="ImageViewer" {% if isOpen %} open {% endif %}>
     <summary></summary>
-    
+
+    <dialog data-name="deletion">
+        <svg width="70" height="70" viewBox="0 0 100 100" alt="">
+            <use xlink:href="/static/icons.svg#warning"></use>
+        </svg>
+
+        <h1>Delete image?</h1>
+
+        <form class="Options">
+            <button type="button" data-type="deny">No, Keep it</button>
+            <button type="submit" data-type="accept">Yes, Delete it</button>
+        </form>
+    </dialog>
+
     <header>
         <a class="CloseBNT" href="/{{id}}/">
             <svg width="20" height="20" viewBox="0 0 110 110" alt="">
-                <use xlink:href="/static/albemClient/icons.svg#close"></use>
+                <use xlink:href="/static/icons.svg#close"></use>
             </svg>
         </a>
         {% if canEdit %}
-            <a href="" class="deleteImage">
+            <button class="DeleteBNT">
                 <svg width="20" height="20" viewBox="0 0 110 110" alt="">
-                    <use xlink:href="/static/albemClient/icons.svg#bin"></use>
+                    <use xlink:href="/static/icons.svg#bin"></use>
                 </svg>
-            </a>
+            </button>
         {% endif %}
     </header>
 

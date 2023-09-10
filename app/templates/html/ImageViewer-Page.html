@@ -6,8 +6,13 @@
         <meta name='viewport' content='width=device-width, initial-scale=1'>
 
         <link rel="stylesheet" href="/static/ImageViewer/css/main.css">
+        <script type="module" defer src="/static/ImageViewer/main.js"></script>
 
         <link rel="prefetch" href="/{{id}}/get-image/{{imageIndex}}" />
+
+        <script>
+            const albemId = "{{id}}"
+        </script>
     </head>
     <body>
         {% include 'html/ImageViewer-Section.html' %}
