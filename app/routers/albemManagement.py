@@ -85,3 +85,14 @@ async def PATCH_Set_Link_Password(password: Annotated[str, Form()] = "", albem =
     else:
         albemsDB.update({"$set": {"password": hash_password(password)}}, id=albem.get("_id"))
         return {"detail": "Password updated"}
+    
+
+@router.put('/update')
+async def PUT_Update_Albem_Details(public: bool, name: str = "", albem = Depends(get_albem_from_id), account = Depends(getUserFromAccessToken)):
+    if(albem.get("owner") != account.get("_id")):
+        raise HTTPException(401, "Only the albem owner may use this endpoint")
+    
+    if(name == ""):
+        raise HTTPException(400, "Name can't be blank")
+    
+    albemsDB.update({"$set": {"name": name, "public": public}})

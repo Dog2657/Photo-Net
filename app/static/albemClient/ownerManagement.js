@@ -132,7 +132,20 @@ settingsDialog.querySelector('form.updatePassword').onsubmit = async (e) => {
     }
 }
 
+settingsDialog.querySelector('form.AlbemDetails').onsubmit = async(e) => {
+    e.preventDefault()
 
+    const nameInput = e.target.querySelector('label.name > input')
+    const publicCheckbox = e.target.querySelector('label.visibility > input[type=checkbox]')
+
+    const [result, error] = await request(`/${albemId}/update?public=${publicCheckbox.checked}&name=${nameInput.value}`, "PUT")
+    if(error){
+        console.error("Failed to update albem details:", error)
+        return
+    }
+
+    document.querySelector('body > header > div.name').textContent = nameInput.value
+}
 
 if(settingsDialog.querySelector('form.updatePassword > button[type=button]'))
     settingsDialog.querySelector('form.updatePassword > button[type=button]').onclick = disableLinkPassword
