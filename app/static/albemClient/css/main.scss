@@ -324,3 +324,98 @@ dialog[data-name=settings]{
         }
     }
 }
+
+dialog[data-name=uploadModal]{
+    width: 500px;
+
+    header{
+        position: relative;
+        text-align: left;
+        display: block;
+        border: none;
+
+        h1{
+            text-align: left;
+            margin: 0;
+            color: #49BD9C;
+        }
+
+        & > div{
+            margin-left: 5px;
+            font-style: italic;
+        }
+        & > form{
+            float: right;
+            position: absolute;
+            right: 0px;
+        }
+    }
+
+    & > form{
+        border: 1px dashed #49BD9C;
+        color: #49BD9C;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        aspect-ratio: 1 / .5;
+
+        label{
+            background-color: #49BD9C;
+            box-sizing: border-box;
+            border-radius: 10px;
+            width: max-content;
+            padding: 10px 20px;
+            cursor: pointer;
+            display: block;
+            color: white;
+
+            input{
+                visibility: none;
+                display: none;
+            }
+        }
+    }
+
+    .file-statuses{
+        & > div{
+            display: grid; 
+            grid-auto-columns: 1fr; 
+            grid-auto-rows: 1fr; 
+            grid-template-columns: max-content 1fr max-content; 
+            grid-template-rows: 1fr 1fr; 
+            gap: 10px 20px; 
+            text-align: left;
+            border: 1px solid grey;
+            padding: 10px;
+            border-radius: 20px;
+            margin: 20px 0;
+            grid-template-areas: 
+                "Icon Filename Button"
+                "Icon Size Button"; 
+
+            .icon{
+                grid-area: Icon;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 50px;
+                background-color: #FFFFFF;
+            }
+
+            .filename{
+                grid-area: Filename;
+                white-space: nowrap; 
+                overflow: hidden;
+                text-overflow: ellipsis; 
+                font-size: 20px;
+            }
+
+            .size{
+                grid-area: Size;
+                font-style: italic;
+                font-size: 15px;
+            }
+        }
+    }
+}

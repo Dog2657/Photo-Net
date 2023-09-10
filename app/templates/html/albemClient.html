@@ -12,6 +12,9 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
         <script defer src="/static/albemClient/main.js"></script>
         <script type="module" async src="/static/albemClient/viewerLoader.js"></script>
+        {% if canEdit %}
+            <script type="module" defer src="/static/albemClient/fileUploader.js"></script>
+        {% endif %}
         {% if isOwner%}
             <script type="module" defer src="/static/albemClient/ownerManagement.js"></script>
         {% endif %}
@@ -21,6 +24,34 @@
         </script>
     </head>
     <body>
+        {% if canEdit %}
+            <dialog data-name="uploadModal">
+                <header>
+                    <form method="dialog">
+                        <button>
+                            <svg width="20" height="20" viewBox="0 0 110 110" alt="">
+                                <use xlink:href="/static/icons.svg#close"></use>
+                            </svg>
+                        </button>
+                    </form>
+
+                    <h1>Images upload</h1>
+                    <div>Upload images to add to this albem</div>
+                </header>
+
+                <form>
+                    <div>Drag and drop files here</div>
+                    <div>- OR -</div>
+                    <label>
+                        Browse Images
+                        <input type="file" multiple accept="image/*">
+                    </label>
+                </form>
+
+                <section class="file-statuses"> </section>
+            </dialog>
+        {% endif %}
+
         {% if isOwner%}
             <dialog data-name="accessManagement">
                 <header>
@@ -97,7 +128,7 @@
                 </form>
 
             </dialog>
-        {% endif %}
+        {% endif %}   
 
         <dialog data-name="share">
             <header>
@@ -132,6 +163,14 @@
                     <use xlink:href="/static/icons.svg#share"></use>
                 </svg>
             </button>
+
+            {% if canEdit %}
+                <button class="upload">
+                    <svg alt="" width="30" height="30" viewBox="0 0 100 100">
+                        <use xlink:href="/static/icons.svg#upload"></use>
+                    </svg>
+                </button>
+            {% endif %}
 
             {% if isOwner%}
                 <button class="Usermanagement">
