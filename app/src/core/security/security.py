@@ -5,9 +5,11 @@ from jose import jwt
 import random
 import string
 
+
 Token_Signing_Key = environment.get("Token_Signing_Key")
 Token_Algorithm = environment.get("Token_Algorithm")
 Password_Context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+
 
 #Password functions
 def hash_password(plain_pwd: str) -> str:

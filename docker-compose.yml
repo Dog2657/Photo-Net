@@ -1,0 +1,12 @@
+version: "3.1"
+services:
+  
+  app:
+    build: ./app        
+    restart: always
+
+    volumes:
+      - ./app:/app
+
+    ports:
+      - "127.0.0.1:3000:80"

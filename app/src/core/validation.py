@@ -1,5 +1,4 @@
 from email_validator import validate_email, EmailNotValidError
-import phonenumbers
 
 def email(address: str) -> bool:
     try:
