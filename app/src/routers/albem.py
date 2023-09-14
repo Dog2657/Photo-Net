@@ -8,6 +8,7 @@ from datetime import datetime, timedelta
 from core import templator, environment
 from typing import Annotated
 
+production = environment.get('production', 'bool')
 
 router = APIRouter(prefix='/{albemId}')
 
@@ -53,7 +54,7 @@ def GET_Viewer_HTML(request: Request, albem = Depends(get_albem_from_id), accoun
         "totalImages": imagesDB.count(albemId=albem.get("_id")),
         "id": albem.get("_id"),
         "imageIndex": 0,
-        "isOpen": False
+        "isOpen": False,
     }
 
     if(account):
@@ -92,6 +93,7 @@ def Get_Albem_Viewer(request: Request, albem = Depends(get_albem_from_id), accou
         "name": albem.get("name"),
         "id": albem.get("_id"),
         "public": albem.get('public'),
+        "production": production
     }
 
 

@@ -74,6 +74,7 @@ async def websocket_endpoint(websocket: WebSocket, albemId: str, account = Depen
     
     manager.register(websocket.client.host, albem.get("_id"), websocket)
 
+    print(manager.active_connections)
     try:
         while True:
             data = await websocket.receive_text()

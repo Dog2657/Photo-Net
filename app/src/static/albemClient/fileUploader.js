@@ -25,7 +25,8 @@ async function handleFilesUpload(files){
     
     const prefixCount = document.querySelector('section.Images').children.length
     const pendingElements = containor.querySelectorAll('[data-finished="false"]')
-    const socket = new WebSocket(`ws://${window.location.host}/api/${albemId}/live-upload-statuses`);
+    const socket = new WebSocket(
+        `${(production)? "wss":"ws"}://${window.location.host}/api/${albemId}/live-upload-statuses`);
 
     socket.addEventListener("message", ({data}) => {
         const { index, state } = JSON.parse(data)

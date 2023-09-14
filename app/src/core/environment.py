@@ -10,3 +10,5 @@ def get(Name: str, type: str = 'str'):
             return str(value)
         case 'int':
             return int(value)
+        case 'bool':
+            return value.lower() == 'true'

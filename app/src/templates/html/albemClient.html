@@ -21,6 +21,8 @@
         <script>
             const albemId = "{{id}}"
             let hasPassword = ("{{hasPassword}}" == "True")? true:false
+            
+            const production = {% if production %} true {% else %} false {% endif %}
         </script>
     </head>
     <body>
